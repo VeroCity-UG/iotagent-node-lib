@@ -1,0 +1,153 @@
+{
+  "title": "Webservice",
+  "description": "Payload for Webservice provisioning",
+  "additionalProperties": false,
+  "type": "object",
+  "properties": {
+    "services": {
+      "type": "array",
+      "id": "services",
+      "required": true,
+      "items": {
+        "web_service_id": {
+          "description": "Webservice ID of the physical Webservice",
+          "type": "string",
+          "required": true
+        },
+        "endpoint": {
+          "description": "Webservice URL",
+          "type": "string",
+          "required": true
+        },
+        "entity_id_expression": {
+          "description": "Primary Key of the entity",
+          "type": "string",
+          "required": true
+        },
+        "entity_id_prefix": {
+          "description": "PR Prefix",
+          "type": "string",
+          "required": false
+        },
+        "entity_type": {
+          "description": "Type of the target entity",
+          "type": "string",
+          "required": true
+        },
+        "timezone": {
+          "description": "Time zone where the Webservice is located",
+          "type": "string"
+        },
+        "lazy": {
+          "description": "list of lazy attributes of the Webservices",
+          "type": "array",
+          "id": "lazy",
+          "required": false,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "object_id": {
+                "description": "ID of the attribute in the Webservice",
+                "type": "string",
+                "pattern": "^([^<>();'=\"]+)+$"
+              },
+              "name": {
+                "description": "Name of the attribute in the target entity",
+                "type": "string",
+                "pattern": "^([^<>();'=\"]+)+$"
+              },
+              "type": {
+                "description": "Type of the attribute in the target entity",
+                "type": "string",
+                "pattern": "^([^<>();'=\"]+)+$"
+              }
+            }
+          }
+        },
+        "attributes": {
+          "description": "list of active attributes of the Webservices",
+          "type": "array",
+          "id": "attributes",
+          "required": false,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "object_id": {
+                "description": "ID of the attribute in the Webservice",
+                "type": "string",
+                "pattern": "^([^<>();'=\"]+)+$"
+              },
+              "name": {
+                "description": "Name of the attribute in the target entity",
+                "type": "string",
+                "pattern": "^([^<>();'=\"]+)+$"
+              },
+              "type": {
+                "description": "Type of the attribute in the target entity",
+                "type": "string",
+                "pattern": "^([^<>();'=\"]+)+$"
+              },
+              "expression": {
+                "description": "Optional expression for measurement transformation",
+                "type": "string",
+                "pattern": "^([^<>;'=]+)+$"
+              },
+              "entity_name": {
+                "description": "Optional entity name for multientity updates",
+                "type": "string",
+                "pattern": "^([^<>;'=\"]+)+$"
+              },
+              "entity_type": {
+                "description": "Optional entity type for multientity updatess",
+                "type": "string",
+                "pattern": "^([^<>;'=\"]+)+$"
+              }
+            }
+          }
+        },
+        "commands": {
+          "description": "list of commands of the Webservices",
+          "type": "array",
+          "id": "lazy",
+          "required": false,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "object_id": {
+                "description": "ID of the attribute in the Webservice",
+                "type": "string",
+                "pattern": "^([^<>();'=\"]+)+$"
+              },
+              "name": {
+                "description": "Name of the attribute in the target entity",
+                "type": "string",
+                "pattern": "^([^<>();'=\"]+)+$"
+              },
+              "type": {
+                "description": "Type of the attribute in the target entity",
+                "type": "string",
+                "pattern": "^([^<>();'=\"]+)+$"
+              },
+              "value": {
+                "description": "Value of the command (currently ignored)",
+                "type": "string",
+                "pattern": "^([^<>();'=\"]+)*$"
+              }
+            }
+          }
+        },
+        "internal_attributes": {
+          "description": "Free form array of internal attributes for particular IOTAgents",
+          "type": "any"
+        },
+        "static_attributes": {
+          "description": "Free form array of data to be appended to the target entity",
+          "type": "array"
+        }
+      }
+    }
+  }
+}
