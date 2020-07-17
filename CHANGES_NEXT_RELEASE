@@ -7,4 +7,12 @@ Add support for JEXL as expression language (#801, #687)
 Fix: log always writing the same correlator id and transaction id (iota-json #426, iota-ul #326)
 Add template to allow `metadata` to be set via the Device API  (#870)
 Fix: correct jexl support for concatenation of float numbers and strings (#868)
+Add basic NGSI-LD support as experimental feature (#842)
+    - Active measures
+    - GeoJSON and DateTime, unitCode and observedAt NGSI-LD support
+        -  The NGSI v2 `TimeInstant` element has been mapped onto the NGSI-LD `observedAt` property
+        -  The NGSI v2 `metadata.unitCode` attribute has been mapped onto the NGSI-LD `unitCode` property
+    - Multi-measures
+    - Lazy Attributes
+    - Commands
 Added feature: selectively ignore some of the measures (iotagent-json#416, iotagent-ul#372)
