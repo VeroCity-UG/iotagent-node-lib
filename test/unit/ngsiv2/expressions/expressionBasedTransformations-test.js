@@ -138,6 +138,21 @@ var iotAgentLib = require('../../../../lib/fiware-iotagent-lib'),
                         type: 'Boolean',
                         expression: '${@updated *  20}'
                     },
+                    {
+                        name: 'location',
+                        type: 'geo:json',
+                        expression: '${@longitude}, ${@latitude}'
+                    },
+                    {
+                        object_id: 'x',
+                        name: 'longitude',
+                        type: 'Number'
+                    },
+                    {
+                        object_id: 'y',
+                        name: 'latitude',
+                        type: 'Number'
+                    }
                 ]
             },
             'WeatherStationMultiple': {
@@ -184,7 +199,7 @@ var iotAgentLib = require('../../../../lib/fiware-iotagent-lib'),
                         name: 'updated',
                         type: 'Boolean',
                         expression: '${trim(@updated)}'
-                    },
+                    }
                 ]
             }
         },
@@ -841,6 +856,42 @@ describe('NGSI-v2 - Expression-based transformations plugin', function() {
 
         it('should apply the expression before sending the values', function(done) {
             iotAgentLib.update('light1', 'Light', '', values, function(error) {
+                should.not.exist(error);
+                contextBrokerMock.done();
+                done();
+            });
+        });
+    });
+
+    describe('When a GeoJSON location is sent as a latitude and longitude', function() {
+
+        var values = [
+            {
+                name: 'x',
+                type: 'Number',
+                value: 0.44
+            },
+            {
+                name: 'y',
+                type: 'Number',
+                value: 10
+            }
+        ];
+
+        beforeEach(function() {
+            nock.cleanAll();
+
+            contextBrokerMock = nock('http://192.168.1.1:1026')
+                .matchHeader('fiware-service', 'smartGondor')
+                .matchHeader('fiware-servicepath', 'gardens')
+                .post('/v2/entities/ws1/attrs', utils.readExampleFile(
+                    './test/unit/ngsiv2/examples/contextRequests/updateContextExpressionPlugin14.json'))
+                .query({type: 'WeatherStation'})
+                .reply(204);
+        });
+
+        it('should apply the expression before sending the values', function(done) {
+            iotAgentLib.update('ws1', 'WeatherStation', '', values, function(error) {
                 should.not.exist(error);
                 contextBrokerMock.done();
                 done();

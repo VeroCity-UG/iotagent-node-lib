@@ -137,6 +137,21 @@ const iotAgentConfig = {
                     name: 'updated',
                     type: 'Boolean',
                     expression: '${@updated *  20}'
+                },
+                {
+                    name: 'location',
+                    type: 'geo:json',
+                    expression: '${@longitude}, ${@latitude}'
+                },
+                {
+                    object_id: 'x',
+                    name: 'longitude',
+                    type: 'Number'
+                },
+                {
+                    object_id: 'y',
+                    name: 'latitude',
+                    type: 'Number'
                 }
             ]
         },
@@ -884,4 +899,38 @@ describe('NGSI-LD - Expression-based transformations plugin', function() {
             });
         }
     );
+
+    describe('When a GeoJSON location is sent as a latitude and longitude', function() {
+
+        var values = [
+            {
+                name: 'x',
+                type: 'Number',
+                value: 0.44
+            },
+            {
+                name: 'y',
+                type: 'Number',
+                value: 10
+            }
+        ];
+
+        beforeEach(function() {
+            nock.cleanAll();
+
+            contextBrokerMock = nock('http://192.168.1.1:1026')
+                .matchHeader('fiware-service', 'smartGondor')
+                .post('/ngsi-ld/v1/entityOperations/upsert/', utils.readExampleFile(
+                    './test/unit/ngsi-ld/examples/contextRequests/updateContextExpressionPlugin20.json'))
+                .reply(204);
+        });
+
+        it('should apply the expression before sending the values', function(done) {
+            iotAgentLib.update('ws1', 'WeatherStation', '', values, function(error) {
+                should.not.exist(error);
+                contextBrokerMock.done();
+                done();
+            });
+        });
+    });
 });
