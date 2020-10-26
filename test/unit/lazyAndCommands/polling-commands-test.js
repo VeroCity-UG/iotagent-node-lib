@@ -23,6 +23,7 @@
 'use strict';
 
 var iotAgentLib = require('../../../lib/fiware-iotagent-lib'),
+    deviceRegistryMongoDB = require('../../../lib/services/devices/deviceRegistryMongoDB'),
     utils = require('../../tools/utils'),
     should = require('should'),
     logger = require('logops'),
@@ -122,9 +123,7 @@ var iotAgentLib = require('../../../lib/fiware-iotagent-lib'),
 describe('NGSI-v1 - Polling commands', function() {
     beforeEach(function(done) {
         logger.setLevel('FATAL');
-
         nock.cleanAll();
-
         contextBrokerMock = nock('http://192.168.1.1:1026')
             .matchHeader('fiware-service', 'smartGondor')
             .matchHeader('fiware-servicepath', 'gardens')
@@ -155,6 +154,7 @@ describe('NGSI-v1 - Polling commands', function() {
                     nock.cleanAll();
                     iotAgentLib.setDataUpdateHandler();
                     iotAgentLib.setCommandHandler();
+                    deviceRegistryMongoDB.clearCache();
                     done();
                 });
             });
